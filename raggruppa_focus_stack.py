@@ -248,8 +248,16 @@ def transfer(src, dst, copy):
 
 
 def folder_name(i, g):
-    return "%s%03d_%s_%dfoto" % (STACK_PREFIX, i, g["start"].strftime("%Y%m%d_%H%M%S"), len(g["shots"]))
+    # Ricavo il nome del primo e dell'ultimo file della serie.
+    primo = os.path.splitext(g["shots"][0]["name"])[0]
+    ultimo = os.path.splitext(g["shots"][-1]["name"])[0]
 
+    # Creo il nome della cartella con il numero di foto e i due nomi.
+    return "Stack(%d)_%s-%s" % (
+        len(g["shots"]),
+        primo,
+        ultimo
+    )
 
 def apply_groups(groups, dest_root, copy):
     log = {"created": dt.datetime.now().isoformat(timespec="seconds"), "mode": "copy" if copy else "move", "items": []}
