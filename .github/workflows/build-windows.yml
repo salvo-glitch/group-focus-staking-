@@ -1,1 +1,24 @@
+name: Build Windows EXE
 
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Scarica il codice
+        uses: actions/checkout@v4
+      - name: Configura Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installa dipendenze
+        run: python -m pip install pyinstaller pillow
+      - name: Crea EXE
+        run: python -m PyInstaller --noconfirm --clean --onefile --console --name RaggruppaFocusStack --collect-all PIL raggruppa_focus_stack.py
+      - name: Pubblica EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: RaggruppaFocusStack-Windows
+          path: dist/RaggruppaFocusStack.exe
